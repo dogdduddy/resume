@@ -8,9 +8,270 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-    <link rel="stylesheet" href="resume.css">
+    <style>
+        /* ── 전병선 이력서 · 수사 기록 컨셉 ───────────────────── */
+        :root {
+          --ink: #1f2733;
+          --ink-soft: #44505e;
+          --ink-faint: #7d8794;
+          --accent: #1f4233;
+          --accent-soft: #4a6d5b;
+          --line: #d7dcd9;
+          --line-accent: #aebcb4;
+          --tag-bg: #eef2ef;
+          --paper: #ffffff;
+          --desk: #eef0f3;
+          --serif: "Noto Serif KR", serif;
+          --sans: "Pretendard", "Pretendard Variable", -apple-system, "Noto Sans KR", sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; }
+
+        body {
+          background: var(--desk);
+          font-family: var(--sans);
+          color: var(--ink);
+          font-size: 15.5px;
+          line-height: 1.75;
+          word-break: keep-all;
+          text-wrap: pretty;
+          font-feature-settings: "tnum";
+        }
+
+        /* ── PDF 버튼 ── */
+        .pdf-btn-wrap {
+          position: fixed;
+          bottom: 32px;
+          right: 32px;
+          z-index: 100;
+        }
+        .pdf-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 22px;
+          background: var(--accent);
+          color: #fff;
+          font-family: var(--sans);
+          font-size: 14px;
+          font-weight: 600;
+          text-decoration: none;
+          border-radius: 6px;
+          cursor: pointer;
+          box-shadow: 0 4px 16px rgba(31, 66, 51, 0.30);
+          transition: background 0.15s, transform 0.1s;
+        }
+        .pdf-btn:hover { background: var(--accent-soft); transform: translateY(-1px); }
+        .pdf-btn:active { transform: translateY(0); }
+        .pdf-btn svg { flex: none; }
+
+        @media print {
+          .pdf-btn-wrap { display: none; }
+        }
+
+        .page {
+          width: 210mm;
+          max-width: 100%;
+          margin: 40px auto;
+          background: var(--paper);
+          padding: 23mm 20mm 25mm 20mm;
+          box-shadow: 0 2px 16px rgba(31, 39, 51, 0.10);
+          border-radius: 3px;
+        }
+
+        /* ── 헤더 ── */
+        .masthead { margin-bottom: 18px; }
+        .masthead h1 {
+          font-family: var(--serif);
+          font-weight: 700;
+          font-size: 34px;
+          letter-spacing: 0.02em;
+          color: var(--ink);
+          line-height: 1.3;
+        }
+        .masthead .role {
+          font-size: 16.5px;
+          font-weight: 600;
+          color: var(--accent);
+          margin-top: 6px;
+        }
+        .masthead .contact {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px 14px;
+          margin-top: 14px;
+          font-size: 13.5px;
+          color: var(--ink-soft);
+        }
+        .masthead .contact a { color: var(--ink-soft); text-decoration: none; }
+        .masthead .contact .sep { color: var(--line-accent); }
+
+        /* ── Summary ── */
+        .summary {
+          border-top: 2px solid var(--accent);
+          border-bottom: 1px solid var(--line);
+          padding: 22px 2px 24px 2px;
+          margin-bottom: 14px;
+        }
+        .summary p { color: var(--ink); }
+        .summary p + p { margin-top: 10px; }
+
+        /* ── 섹션 ── */
+        section.block { padding-top: 30px; }
+        .section-title {
+          font-family: var(--serif);
+          font-size: 21px;
+          font-weight: 700;
+          letter-spacing: 0.02em;
+          color: var(--accent);
+          border-top: 2.5px solid var(--accent);
+          padding-top: 14px;
+          margin-bottom: 28px;
+          print-color-adjust: exact;
+          -webkit-print-color-adjust: exact;
+        }
+
+        /* ── 엔트리 ── */
+        .entry { margin-bottom: 40px; }
+        .entry:last-child { margin-bottom: 6px; }
+        .entry-head {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 16px;
+        }
+        .entry-head h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+        .entry-head .period { font-size: 13px; color: var(--ink-faint); white-space: nowrap; font-weight: 500; }
+        .entry-lede { margin-top: 8px; color: var(--ink-soft); font-size: 14.5px; }
+        .entry .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+        .entry .stack span {
+          font-size: 12px;
+          font-weight: 600;
+          color: var(--accent);
+          background: var(--tag-bg);
+          border-radius: 3px;
+          padding: 3px 9px;
+          print-color-adjust: exact;
+          -webkit-print-color-adjust: exact;
+        }
+
+        /* ── 케이스 ── */
+        .case { margin-top: 30px; }
+        .case > h4 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+        .case > .context { font-size: 14px; color: var(--ink-soft); margin-bottom: 18px; }
+
+        /* ── 수사 기록 타임라인 ── */
+        .trace { display: flex; flex-direction: column; }
+        .step { display: flex; align-items: stretch; }
+        .step .label {
+          position: relative;
+          flex: none;
+          width: 104px;
+          padding-left: 28px;
+          padding-right: 14px;
+          font-size: 12.5px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          line-height: 22px;
+          color: var(--accent);
+          white-space: nowrap;
+        }
+        .step .label::before {
+          content: "";
+          position: absolute;
+          z-index: 2;
+          left: 0.5px;
+          top: 5.5px;
+          width: 11px;
+          height: 11px;
+          border-radius: 50%;
+          background: var(--paper);
+          border: 2px solid var(--accent);
+          box-sizing: border-box;
+          print-color-adjust: exact;
+          -webkit-print-color-adjust: exact;
+        }
+        .step.result .label::before {
+          background: var(--accent);
+          print-color-adjust: exact;
+          -webkit-print-color-adjust: exact;
+        }
+        .step .label::after {
+          content: "";
+          position: absolute;
+          z-index: 1;
+          left: 5px;
+          top: 0;
+          bottom: 0;
+          border-left: 2px solid var(--line-accent);
+        }
+        .step:first-child .label::after { top: 11px; }
+        .step:last-child .label::after { bottom: auto; height: 11px; }
+        .step .body { flex: 1; min-width: 0; padding-bottom: 22px; }
+        .step:last-child .body { padding-bottom: 0; }
+        .step .body p + p { margin-top: 10px; }
+
+        .sublist { list-style: none; margin-top: 12px; display: grid; gap: 12px; }
+        .sublist li { padding-left: 16px; border-left: 2px solid var(--line); }
+        .sublist li b.tag { display: block; font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+
+        .plain-list { list-style: none; display: grid; gap: 12px; margin-top: 12px; }
+        .plain-list li { position: relative; padding-left: 18px; }
+        .plain-list li::before {
+          content: "";
+          position: absolute;
+          left: 1px;
+          top: 9px;
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          border: 2px solid var(--accent-soft);
+          box-sizing: border-box;
+        }
+
+        .gap-note {
+          margin-bottom: 40px;
+          padding: 18px 22px;
+          background: #f1f4f2;
+          border-radius: 4px;
+          print-color-adjust: exact;
+          -webkit-print-color-adjust: exact;
+        }
+        .gap-note .entry-head h3 { font-size: 15.5px; color: var(--ink-soft); }
+        .gap-note p { font-size: 14px; color: var(--ink-soft); margin-top: 6px; }
+
+        .edu .entry-head h3 { font-size: 17px; }
+        .edu .detail { margin-top: 6px; color: var(--ink-soft); font-size: 14.5px; }
+
+        /* ── 인쇄 ── */
+        @page { size: A4; margin: 18mm 0 20mm 0; }
+        @media print {
+          body { background: none; font-size: 11.5pt; }
+          .page { width: auto; margin: 0; padding: 0 20mm; box-shadow: none; border-radius: 0; }
+          section.block { page-break-inside: auto; }
+          .entry-head, .case > h4, .case > .context { break-after: avoid; }
+          .step .label, .step .body p, .sublist li, .plain-list li,
+          .summary, .gap-note, .edu, .masthead { break-inside: avoid; }
+          .section-title { break-after: avoid; }
+          a { color: inherit; }
+        }
+    </style>
 </head>
 <body>
+
+<!-- ── PDF 보기 버튼 ── -->
+<div class="pdf-btn-wrap">
+    <a class="pdf-btn" href="resume.pdf" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="1" width="10" height="13" rx="1.5" stroke="#fff" stroke-width="1.4"/>
+            <path d="M6 1v4h6" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M5 8h6M5 11h4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        PDF로 보기
+    </a>
+</div>
+
 <div class="page">
 
     <!-- ── 헤더 ── -->
@@ -35,7 +296,6 @@
     <section class="block">
         <div class="section-title">Work Experience</div>
 
-        <!-- Tyrell -->
         <div class="entry">
             <div class="entry-head">
                 <h3>Tyrell</h3>
@@ -43,7 +303,6 @@
             </div>
             <p class="entry-lede">B2B2C AI 코칭 플랫폼 Cochi의 Android를 단독으로 맡아, 아키텍처 설계부터 기능 구현, 운영까지 전 영역을 주도하고 있습니다.</p>
 
-            <!-- Case 1: WebSocket -->
             <div class="case">
                 <h4>실시간 AI 채팅 안정성 개선 (WebSocket)</h4>
                 <p class="context">Cochi의 코칭 대화는 실시간 WebSocket으로 오가기 때문에, 연결 안정성이 곧 대화 경험의 핵심입니다.</p>
@@ -80,7 +339,6 @@
                 </div>
             </div>
 
-            <!-- Case 2: Turn -->
             <div class="case">
                 <h4>AI 대화의 턴(turn) 경계 설계: 사용성 테스트로 임계값 도출</h4>
                 <p class="context">일반 채팅과 달리 AI 코칭 대화에서는, 사용자가 메시지를 나눠 보내는 도중에 AI가 끼어들어 응답하면 대화가 어색해집니다. 그래서 여러 메시지를 하나의 턴으로 묶어 보내는 정책이 필요했습니다.</p>
@@ -100,7 +358,6 @@
                 </div>
             </div>
 
-            <!-- Case 3: FCM -->
             <div class="case">
                 <h4>FCM 푸시 알림 안정성 개선</h4>
                 <p class="context">코치가 보내는 푸시 알림은 사용자가 다시 앱으로 돌아와 코칭을 이어가게 만드는 핵심 동선입니다.</p>
@@ -138,7 +395,6 @@
             </div>
         </div>
 
-        <!-- 경력 공백 -->
         <div class="gap-note">
             <div class="entry-head">
                 <h3>경력 공백</h3>
@@ -147,14 +403,12 @@
             <p>Swit Korea의 구조조정으로 퇴사한 뒤, 다음 커리어를 신중히 정하면서 사이드 프로젝트로 Android 역량을 유지했습니다(파타타, WatchTimer는 아래 Other Projects 참고). 이후 Android 단독 개발 환경을 책임질 수 있는 회사 Tyrell에 합류했습니다.</p>
         </div>
 
-        <!-- Swit Korea -->
         <div class="entry">
             <div class="entry-head">
                 <h3>Swit Korea</h3>
                 <span class="period">2023.03 – 2024.05</span>
             </div>
             <p class="entry-lede">협업 도구 Swit의 Developers 프로젝트에서 Android를 담당했습니다. Android, iOS, Web, Server, 기획, 디자인, 보안 등 총 10명이 참여한 프로젝트에서, 여러 진입 경로에 걸쳐 일관된 동작을 설계하는 경험을 했습니다.</p>
-
             <div class="case">
                 <h4>딥링크 진입 구조 개선</h4>
                 <div class="trace">
@@ -178,7 +432,6 @@
     <!-- ── FEATURED PROJECT ── -->
     <section class="block">
         <div class="section-title">Featured Project</div>
-
         <div class="entry">
             <div class="entry-head">
                 <h3>Took (툭)</h3>
