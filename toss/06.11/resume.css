@@ -1,0 +1,280 @@
+/* ── 전병선 이력서 · 수사 기록 컨셉 ───────────────────── */
+:root {
+  --ink: #1f2733;
+  --ink-soft: #44505e;
+  --ink-faint: #7d8794;
+  --accent: #1f4233;          /* 차분한 딥그린 (숲) */
+  --accent-soft: #4a6d5b;
+  --line: #d7dcd9;
+  --line-accent: #aebcb4;
+  --tag-bg: #eef2ef;
+  --paper: #ffffff;
+  --desk: #eef0f3;
+  --serif: "Noto Serif KR", serif;
+  --sans: "Pretendard", "Pretendard Variable", -apple-system, "Noto Sans KR", sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--desk);
+  font-family: var(--sans);
+  color: var(--ink);
+  font-size: 15.5px;          /* ≈ 11.5pt */
+  line-height: 1.75;
+  word-break: keep-all;
+  text-wrap: pretty;
+  font-feature-settings: "tnum";
+}
+
+.page {
+  width: 210mm;
+  max-width: 100%;
+  margin: 40px auto;
+  background: var(--paper);
+  padding: 23mm 20mm 25mm 20mm;
+  box-shadow: 0 2px 16px rgba(31, 39, 51, 0.10);
+  border-radius: 3px;
+}
+
+/* ── 헤더 ── */
+.masthead { margin-bottom: 18px; }
+.masthead h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 34px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.masthead .role {
+  font-size: 16.5px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-top: 6px;
+}
+.masthead .contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 14px;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+}
+.masthead .contact a { color: var(--ink-soft); text-decoration: none; }
+.masthead .contact .sep { color: var(--line-accent); }
+
+/* ── Summary ── */
+.summary {
+  border-top: 2px solid var(--accent);
+  border-bottom: 1px solid var(--line);
+  padding: 22px 2px 24px 2px;
+  margin-bottom: 14px;
+}
+.summary p { color: var(--ink); }
+.summary p + p { margin-top: 10px; }
+
+/* ── 섹션 ── */
+section.block { padding-top: 30px; }
+.section-title {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  text-transform: none;
+  border-top: 2.5px solid var(--accent);
+  padding-top: 14px;
+  margin-bottom: 28px;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+/* ── 회사 / 프로젝트 엔트리 ── */
+.entry { margin-bottom: 40px; }
+.entry:last-child { margin-bottom: 6px; }
+.entry-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+.entry-head h3 {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.entry-head .period {
+  font-size: 13px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  font-weight: 500;
+}
+.entry-lede {
+  margin-top: 8px;
+  color: var(--ink-soft);
+  font-size: 14.5px;
+}
+.entry .stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.entry .stack span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--tag-bg);
+  border-radius: 3px;
+  padding: 3px 9px;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+/* ── 케이스(문제 해결 단위) ── */
+.case { margin-top: 30px; }
+.case > h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.case > .context {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+
+/* ── 수사 기록: 거터 + 세로선 ── */
+/* 세로선은 background가 아닌 border로 그려 인쇄(PDF)에서도 항상 보이게 한다. */
+.trace {
+  display: flex;
+  flex-direction: column;
+}
+.step {
+  display: flex;
+  align-items: stretch;      /* 라벨 셀이 행 높이만큼 늘어나 세로선이 끊기지 않게 */
+}
+.step .label {
+  position: relative;
+  flex: none;
+  width: 104px;
+  padding-left: 28px;
+  padding-right: 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 22px;         /* 첫 줄 중심 = 11px → 원 세로 정렬 기준 */
+  color: var(--accent);
+  white-space: nowrap;
+}
+/* 노드 원: 중심 x=6, 중심 y=11 (라벨 첫 줄 중앙) */
+.step .label::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 0.5px;
+  top: 5.5px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--accent);
+  box-sizing: border-box;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.step.result .label::before {
+  background: var(--accent);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+/* 세로 연결선: 중심 x=6, 원 중심과 일치. 라벨 셀 전체 높이를 채워 행 사이가 끊기지 않는다. */
+.step .label::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 5px;
+  top: 0;
+  bottom: 0;
+  border-left: 2px solid var(--line-accent);
+}
+.step:first-child .label::after { top: 11px; }          /* 첫 원 중심에서 시작 */
+.step:last-child .label::after { bottom: auto; height: 11px; }  /* 마지막 원 중심에서 끝 */
+.step .body {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 22px;      /* 단계 사이 여백 */
+}
+.step:last-child .body { padding-bottom: 0; }
+.step .body p + p { margin-top: 10px; }
+
+/* 해결 단계 안의 소항목 */
+.sublist { list-style: none; margin-top: 12px; display: grid; gap: 12px; }
+.sublist li {
+  padding-left: 16px;
+  border-left: 2px solid var(--line);
+}
+.sublist li b.tag {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+/* 일반 불릿 (Other Projects 등) */
+.plain-list { list-style: none; display: grid; gap: 12px; margin-top: 12px; }
+.plain-list li {
+  position: relative;
+  padding-left: 18px;
+}
+.plain-list li::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-soft);
+  box-sizing: border-box;
+}
+
+/* 경력 공백 노트 */
+.gap-note {
+  margin-bottom: 40px;
+  padding: 18px 22px;
+  background: #f1f4f2;
+  border-radius: 4px;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.gap-note .entry-head h3 { font-size: 15.5px; color: var(--ink-soft); }
+.gap-note p { font-size: 14px; color: var(--ink-soft); margin-top: 6px; }
+
+/* Education */
+.edu .entry-head h3 { font-size: 17px; }
+.edu .detail { margin-top: 6px; color: var(--ink-soft); font-size: 14.5px; }
+
+/* ── 인쇄 ── */
+@page { size: A4; margin: 18mm 0 20mm 0; }
+@media print {
+  body { background: none; font-size: 11.5pt; }
+  .page {
+    width: auto;
+    margin: 0;
+    padding: 0 20mm;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  section.block { page-break-inside: auto; }
+  .entry-head, .case > h4, .case > .context { break-after: avoid; }
+  .step .label, .step .body p, .sublist li, .plain-list li,
+  .summary, .gap-note, .edu, .masthead { break-inside: avoid; }
+  .section-title { break-after: avoid; }
+  a { color: inherit; }
+}

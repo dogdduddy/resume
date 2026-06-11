@@ -1,0 +1,23 @@
+/app/google-services.json
+/build
+/app/build
+/.gradle
+
+# IDE specific settings
+.idea/
+.idea/caches/
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/modules.xml
+.idea/deploymentTargetSelector.xml
+
+
+.kotlin/
+*.log
+
+local.properties
+/key
+
+.DS_Store
+
+build/
